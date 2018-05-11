@@ -39,17 +39,41 @@ function renderShoppingList() {
   $('.js-shopping-list').html(shoppingListItemString);  
 }
 
-
-function handleNewItemSubmit() {
-  // this function will be responsible for when users add a new shopping list item
-  console.log('`handleNewItemSubmit` ran');
+function addItemToShoppingList(itemName) {
+  console.log(`Adding ${itemName} to shopping list`);
+  STORE.push({name: itemName, checked: false});
 }
 
 
+function handleNewItemSubmit() {
+  $('#js-shopping-list-form').submit(function(event) {
+    event.preventDefault();
+    const newItemName = $('.js-shopping-list-entry').val();
+    $('.js-shopping-list-entry').val('');
+    addItemToShoppingList(newItemName);
+    renderShoppingList();
+  });
+}
+
+function toggleCheckedForListItem(index) {
+  console.log('Toggling checked porperty for item at index' + index);
+  STORE[index].checked = !STORE[index].checked;
+}
+
+function getItemIndexFromElement(item) {
+  const itemIndexString = $(item)
+    .closest('.js-item-index-element')
+    .attr('data-item-index');
+  return (parseInt(itemIndexString, 10));
+}
+
 function handleItemCheckClicked() {
-  // this function will be responsible for when users click the "check" button on
-  // a shopping list item.
-  console.log('`handleItemCheckClicked` ran');
+  $('.js-shopping-list').on('click', '.js-item-toggle', event => {
+    const itemIndex = getItemIndexFromElement(event.currentTarget);
+   
+    toggleCheckedForListItem(itemIndex);
+    renderShoppingList();
+  });
 }
 
 
