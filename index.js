@@ -17,7 +17,17 @@ const STORE = [
 ];
 
 function generateItemElement(item,index){
-  return `<li>${item.name}</li>`;
+  return  `<li class="js-item-index-element" data-item-index="${index}">
+  <span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>
+  <div class="shopping-item-controls">
+    <button class="shopping-item-toggle js-item-toggle">
+        <span class="button-label">check</span>
+    </button>
+    <button class="shopping-item-delete js-item-delete">
+        <span class="button-label">delete</span>
+    </button>
+  </div>
+</li>`;
 }
 function generateShoppingItemsString(shoppingList){
   const items = shoppingList.map((item,index) => generateItemElement(item,index));
