@@ -9,12 +9,13 @@
 // indicates if it's checked off or not.
 // we're pre-adding items to the shopping list so there's
 // something to see when the page first loads.
-const STORE = [
-  {name: 'apples', checked: false},
-  {name: 'oranges', checked: false},
-  {name: 'milk', checked: true},
-  {name: 'bread', checked: false}
-];
+const STORE = {
+  items: [{name: 'apples', checked: false},
+    {name: 'oranges', checked: false},
+    {name: 'milk', checked: true},
+    {name: 'bread', checked: false}],
+  checkFilterCheckbox: true 
+};
 
 function generateItemElement(item,index){
   return  `<li class="js-item-index-element" data-item-index="${index}">
@@ -35,13 +36,13 @@ function generateShoppingItemsString(shoppingList){
 }
 
 function renderShoppingList() {
-  const shoppingListItemString = generateShoppingItemsString(STORE);  
+  const shoppingListItemString = generateShoppingItemsString(STORE.items);  
   $('.js-shopping-list').html(shoppingListItemString);  
 }
 
 function addItemToShoppingList(itemName) {
   console.log(`Adding ${itemName} to shopping list`);
-  STORE.push({name: itemName, checked: false});
+  STORE.items.push({name: itemName, checked: false});
 }
 
 
@@ -56,7 +57,7 @@ function handleNewItemSubmit() {
 }
 
 function toggleCheckedForListItem(index) {
-  STORE[index].checked = !STORE[index].checked;
+  STORE.items[index].checked = !STORE.items[index].checked;
 }
 
 function getItemIndexFromElement(item) {
@@ -75,7 +76,7 @@ function handleItemCheckClicked() {
 }
 
 function deleteListItem(index) {
-  return STORE.splice(index, 1);
+  return STORE.items.splice(index, 1);
 }
 
 function handleDeleteItemClicked() {
@@ -87,6 +88,27 @@ function handleDeleteItemClicked() {
   console.log('`handleDeleteItemClicked` ran');
 }
 
+function filterCheckedItems(checkBoxStatus) {
+  if (checkBoxStatus === true) {
+    
+  }
+}
+
+function handleCheckedFilterCheckbox() {
+  $('.js-check-filter-checkbox').on('change', function(event) {
+    console.log('you checked the box!');
+    const checkboxValue = $('.js-check-filter-checkbox').val();
+    console.log(checkboxValue);
+    filterCheckedItems(checkboxValue);
+  }); 
+}
+//capture checkbox input from user
+
+function checkedFilter() {}
+//filter data to show only unchecked items
+
+
+
 // this function will be our callback when the page loads. it's responsible for
 // initially rendering the shopping list, and activating our individual functions
 // that handle new item submission and user clicks on the "check" and "delete" buttons
@@ -96,7 +118,7 @@ function handleShoppingList() {
   handleNewItemSubmit();
   handleItemCheckClicked();
   handleDeleteItemClicked();
-
+  handleCheckedFilterCheckbox();
 }
 
 // when the page loads, call `handleShoppingList`
