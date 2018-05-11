@@ -56,7 +56,6 @@ function handleNewItemSubmit() {
 }
 
 function toggleCheckedForListItem(index) {
-  console.log('Toggling checked porperty for item at index' + index);
   STORE[index].checked = !STORE[index].checked;
 }
 
@@ -70,16 +69,21 @@ function getItemIndexFromElement(item) {
 function handleItemCheckClicked() {
   $('.js-shopping-list').on('click', '.js-item-toggle', event => {
     const itemIndex = getItemIndexFromElement(event.currentTarget);
-   
     toggleCheckedForListItem(itemIndex);
     renderShoppingList();
   });
 }
 
+function deleteListItem(index) {
+  return STORE.splice(index, 1);
+}
 
 function handleDeleteItemClicked() {
-  // this function will be responsible for when users want to delete a shopping list
-  // item
+  $('.js-shopping-list').on('click', '.js-item-delete', event => {
+    const itemIndex = getItemIndexFromElement(event.currentTarget);
+    deleteListItem(itemIndex);
+    renderShoppingList();
+  });
   console.log('`handleDeleteItemClicked` ran');
 }
 
