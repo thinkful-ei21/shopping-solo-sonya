@@ -16,17 +16,17 @@ const STORE = [
   {name: 'bread', checked: false}
 ];
 
+function generateItemElement(item,index){
+  return `<li>${item.name}</li>`;
+}
 function generateShoppingItemsString(shoppingList){
-  return `<li>apples</li>
-          <li>oranges</li>
-          <li>milk</li>
-          <li>bread</li>`;
+  const items = shoppingList.map((item,index) => generateItemElement(item,index));
+  return items.join(' ');
 }
 
 function renderShoppingList() {
-  const shoppingListItemString = generateShoppingItemsString(STORE);
-  $('.js-shopping-list').html(shoppingListItemString);
-  //console.log('`renderShoppingList` ran');
+  const shoppingListItemString = generateShoppingItemsString(STORE);  
+  $('.js-shopping-list').html(shoppingListItemString);  
 }
 
 
