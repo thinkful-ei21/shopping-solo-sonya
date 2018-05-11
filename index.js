@@ -10,18 +10,23 @@
 // we're pre-adding items to the shopping list so there's
 // something to see when the page first loads.
 const STORE = [
-  {name: "apples", checked: false},
-  {name: "oranges", checked: false},
-  {name: "milk", checked: true},
-  {name: "bread", checked: false}
+  {name: 'apples', checked: false},
+  {name: 'oranges', checked: false},
+  {name: 'milk', checked: true},
+  {name: 'bread', checked: false}
 ];
 
+function generateShoppingItemsString(shoppingList){
+  return `<li>apples</li>
+          <li>oranges</li>
+          <li>milk</li>
+          <li>bread</li>`;
+}
 
 function renderShoppingList() {
-  const shoppingListItemString = '<li>apples</li>';
-  $('.js-shopping-list').html(shoppingListItemsString);
-}
-  console.log('`renderShoppingList` ran');
+  const shoppingListItemString = generateShoppingItemsString(STORE);
+  $('.js-shopping-list').html(shoppingListItemString);
+  //console.log('`renderShoppingList` ran');
 }
 
 
@@ -41,7 +46,7 @@ function handleItemCheckClicked() {
 function handleDeleteItemClicked() {
   // this function will be responsible for when users want to delete a shopping list
   // item
-  console.log('`handleDeleteItemClicked` ran')
+  console.log('`handleDeleteItemClicked` ran');
 }
 
 // this function will be our callback when the page loads. it's responsible for
