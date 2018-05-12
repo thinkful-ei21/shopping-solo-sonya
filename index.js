@@ -14,7 +14,7 @@ const STORE = {
     {name: 'oranges', checked: false},
     {name: 'milk', checked: true},
     {name: 'bread', checked: false}],
-  checkFilterCheckbox: true 
+  checkFilterCheckbox: false 
 };
 
 function generateItemElement(item,index){
@@ -35,10 +35,30 @@ function generateShoppingItemsString(shoppingList){
   return items.join(' ');
 }
 
-function renderShoppingList() {
-  const shoppingListItemString = generateShoppingItemsString(STORE.items);  
-  $('.js-shopping-list').html(shoppingListItemString);  
+function filterShoppingList(items) {
+  let shoppingListItemsString;
+  if (STORE.checkFilterCheckbox === true) {
+    const filteredShoppingList = items.filter(element => element.checked === false);
+    shoppingListItemsString = generateShoppingItemsString(filteredShoppingList);
+    return shoppingListItemsString;
+  } else {
+    shoppingListItemsString = generateShoppingItemsString(items);
+    return shoppingListItemsString;
+  }
 }
+
+
+function renderShoppingList() {
+  const items = [...STORE.items];  
+  let shoppingListItemsString = filterShoppingList(items);
+  $('.js-shopping-list').html(shoppingListItemsString);  
+}
+
+
+// const shoppingListItemString = generateShoppingItemsString(STORE.items);  
+// $('.js-shopping-list').html(shoppingListItemString); 
+
+
 
 function addItemToShoppingList(itemName) {
   console.log(`Adding ${itemName} to shopping list`);
@@ -85,23 +105,26 @@ function handleDeleteItemClicked() {
     deleteListItem(itemIndex);
     renderShoppingList();
   });
-  console.log('`handleDeleteItemClicked` ran');
 }
 
-function filterCheckedItems(checkBoxStatus) {
-  if (checkBoxStatus === true) {
-    
-  }
-}
+
 
 function handleCheckedFilterCheckbox() {
   $('.js-check-filter-checkbox').on('change', function(event) {
-    console.log('you checked the box!');
-    const checkboxValue = $('.js-check-filter-checkbox').val();
-    console.log(checkboxValue);
-    filterCheckedItems(checkboxValue);
-  }); 
+    console.log('you checked the box');
+    if (event.currentTarget.checked) {
+      STORE.checkFilterCheckbox = true;
+      console.log('it`s set to true');
+    } else {
+      STORE.checkFilterCheckbox = false;
+      console.log('it`s set to false');
+    }
+   
+    console.log(STORE.checkFilterCheckbox);
+    renderShoppingList();
+  });
 }
+
 //capture checkbox input from user
 
 function checkedFilter() {}
