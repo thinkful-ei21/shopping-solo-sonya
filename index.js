@@ -18,7 +18,8 @@ const STORE = {
 };
 
 function generateItemElement(item,index){
-  return  `<li class="js-item-index-element" data-item-index="${index}">
+
+  return  `<li class="js-item-index-element" data-item-index="${item[index]}">
   <span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>
   <div class="shopping-item-controls">
     <button class="shopping-item-toggle js-item-toggle">
@@ -29,6 +30,7 @@ function generateItemElement(item,index){
     </button>
   </div>
 </li>`;
+
 }
 function generateShoppingItemsString(shoppingList){
   const items = shoppingList.map((item,index) => generateItemElement(item,index));
@@ -38,7 +40,11 @@ function generateShoppingItemsString(shoppingList){
 function filterShoppingList(items) {
   let shoppingListItemsString;
   if (STORE.checkFilterCheckbox === true) {
-    const filteredShoppingList = items.filter(element => element.checked === false);
+    const filteredShoppingList = items.filter((element, index) => {
+      element[index] = index;
+      return element.checked === false;
+    });
+    console.log(filteredShoppingList);
     shoppingListItemsString = generateShoppingItemsString(filteredShoppingList);
     return shoppingListItemsString;
   } else {
@@ -77,6 +83,7 @@ function handleNewItemSubmit() {
 }
 
 function toggleCheckedForListItem(index) {
+  console.log(index);
   STORE.items[index].checked = !STORE.items[index].checked;
 }
 
