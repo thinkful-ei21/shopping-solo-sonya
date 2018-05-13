@@ -15,13 +15,16 @@ const STORE = {
     {name: 'milk', checked: true},
     {name: 'bread', checked: false}],
   checkFilterCheckbox: false,
-  search: '' 
+  search: '', 
+  editInput: ''
 };
+
+//Render the page
 
 function generateItemElement(item,index){
   return  `<li class="js-item-index-element" data-item-index="${index}">
   <span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>
-  <form id='js-item-edit-form>
+  <form class='js-item-edit-form'>
     <label for='edited-item-value'>Edit your Item</label>
     <input type='text' name='edited-item-value' class='js-edited-item-text-box' 'edited-item-text-box'>
     <button type='submit'>Edit</button>
@@ -35,7 +38,6 @@ function generateItemElement(item,index){
     </button>
   </div>
 </li>`;
-
 }
 
 function generateShoppingItemsString(shoppingList){
@@ -58,13 +60,28 @@ function renderShoppingList() {
   const items = [...STORE.items];  
   let shoppingListItemsString = generateShoppingItemsString(items);
   $('.js-shopping-list').html(shoppingListItemsString);  
+  //handleItemEditSubmit();
 } 
+
+//add new items to shopping list
 
 function addItemToShoppingList(itemName) {
   console.log(`Adding ${itemName} to shopping list`);
   STORE.items.push({name: itemName, checked: false});
 }
 
+function handleItemEditSubmit() {
+  $('.js-shopping-list').on('submit', '.js-item-edit-form', function(event) {
+    event.preventDefault();
+    console.log('you clicked the edit button');
+    const editedItemInput = $('.js-edited-item-text-box').val();
+    $('.js-edited-item-text-box').val('');
+    STORE.editInput = editedItemInput;
+    console.log('handleItemEditSubmit ran');
+    console.log(STORE.editInput);
+    renderShoppingList();
+  });
+}
 
 function handleNewItemSubmit() {
   $('#js-shopping-list-form').submit(function(event) {
@@ -76,6 +93,10 @@ function handleNewItemSubmit() {
     renderShoppingList();
   });
 }
+
+
+
+//check and uncheck items
 
 function toggleCheckedForListItem(index) {
   console.log(index);
@@ -97,6 +118,8 @@ function handleItemCheckClicked() {
   });
 }
 
+//delete list items
+
 function deleteListItem(index) {
   return STORE.items.splice(index, 1);
 }
@@ -108,6 +131,8 @@ function handleDeleteItemClicked() {
     renderShoppingList();
   });
 }
+
+//filter out all checked items from list
 
 function handleCheckedFilterCheckbox() {
   $('.js-check-filter-checkbox').on('change', function(event) {
@@ -125,6 +150,7 @@ function handleCheckedFilterCheckbox() {
   });
 }
 
+//search for specific item regardless of checked status
 
 function findSearchItem(items) {
   return items.find(item => item.includes(STORE.search));
@@ -136,11 +162,10 @@ function handleSearchSubmit() {
     console.log('you clicked the search submit button');
     const searchInput = $('.js-search-box').val();
     STORE.search = searchInput;
-    //$('.js-search-box').val('');
-    //filterResultsBySearchInput(searchInput);
     renderShoppingList();
   });
 }
+
 
 //edit generatItemElement() to contain form with text box for name and edit button
 //handleItemEditSubmit() {}
@@ -160,7 +185,7 @@ function handleShoppingList() {
   handleDeleteItemClicked();
   handleCheckedFilterCheckbox();
   handleSearchSubmit();
-  //handleItemEditSubmit();
+  handleItemEditSubmit();
 }
 
 // when the page loads, call `handleShoppingList`
