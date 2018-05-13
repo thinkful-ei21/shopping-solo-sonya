@@ -21,6 +21,11 @@ const STORE = {
 function generateItemElement(item,index){
   return  `<li class="js-item-index-element" data-item-index="${index}">
   <span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>
+  <form id='js-item-edit-form>
+    <label for='edited-item-value'>Edit your Item</label>
+    <input type='text' name='edited-item-value' class='js-edited-item-text-box' 'edited-item-text-box'>
+    <button type='submit'>Edit</button>
+  </form><br>
   <div class="shopping-item-controls">
     <button class="shopping-item-toggle js-item-toggle">
         <span class="button-label">check</span>
@@ -137,6 +142,13 @@ function handleSearchSubmit() {
   });
 }
 
+//edit generatItemElement() to contain form with text box for name and edit button
+//handleItemEditSubmit() {}
+//get value of item text box
+//editItemName() {}
+//use editItemName() in generateShoppingItemsString() 
+
+
 // this function will be our callback when the page loads. it's responsible for
 // initially rendering the shopping list, and activating our individual functions
 // that handle new item submission and user clicks on the "check" and "delete" buttons
@@ -148,6 +160,7 @@ function handleShoppingList() {
   handleDeleteItemClicked();
   handleCheckedFilterCheckbox();
   handleSearchSubmit();
+  //handleItemEditSubmit();
 }
 
 // when the page loads, call `handleShoppingList`
