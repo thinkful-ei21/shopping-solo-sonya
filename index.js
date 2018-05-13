@@ -14,7 +14,8 @@ const STORE = {
     {name: 'oranges', checked: false},
     {name: 'milk', checked: true},
     {name: 'bread', checked: false}],
-  checkFilterCheckbox: false 
+  checkFilterCheckbox: false,
+  search: '' 
 };
 
 function generateItemElement(item,index){
@@ -35,15 +36,17 @@ function generateItemElement(item,index){
 
 function generateShoppingItemsString(shoppingList){
   const items = shoppingList.map((item,index) => generateItemElement(item,index));
-  if (STORE.checkFilterCheckbox === true) {
-    const filteredCheckedItems = filterShoppingList(items); 
+  if (STORE.search !== '') {
+    return findSearchItem(items);
+  } else if (STORE.checkFilterCheckbox === true) {
+    const filteredCheckedItems = filterCheckedItems(items); 
     return filteredCheckedItems.join(' ');
   } else {
     return items.join(' ');
   }
 }
 
-function filterShoppingList(items) {
+function filterCheckedItems(items) {
   return items.filter(item => item.indexOf('shopping-item__checked') === -1);
 }
 
@@ -58,7 +61,7 @@ function addItemToShoppingList(itemName) {
   STORE.items.push({name: itemName, checked: false});
 }
 
-//Question! -- to differentiate between the two buttons in the form, I'm using the .click instead of .submit, is this good practice?
+
 function handleNewItemSubmit() {
   $('#js-shopping-list-form').submit(function(event) {
     console.log('handleNewItemSubmit ran');
@@ -102,8 +105,6 @@ function handleDeleteItemClicked() {
   });
 }
 
-
-
 function handleCheckedFilterCheckbox() {
   $('.js-check-filter-checkbox').on('change', function(event) {
     console.log('you checked the box');
@@ -120,28 +121,22 @@ function handleCheckedFilterCheckbox() {
   });
 }
 
-function filterResultsBySearchInput(input) {
-  console.log('filterResultsBySearchInput ran');
-  
-}
 
+function findSearchItem(items) {
+  return items.find(item => item.includes(STORE.search));
+}
 
 function handleSearchSubmit() {
   $('#js-search-form').submit(function(event) {
     event.preventDefault();
     console.log('you clicked the search submit button');
     const searchInput = $('.js-search-box').val();
-    $('.js-search-box').val('');
-    filterResultsBySearchInput(searchInput);
+    STORE.search = searchInput;
+    //$('.js-search-box').val('');
+    //filterResultsBySearchInput(searchInput);
     renderShoppingList();
   });
 }
-
-
-
-//function handleSearchSubmit() {}
-//filter list according to search input
-
 
 // this function will be our callback when the page loads. it's responsible for
 // initially rendering the shopping list, and activating our individual functions
