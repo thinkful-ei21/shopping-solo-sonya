@@ -40,25 +40,11 @@ function generateShoppingItemsString(shoppingList){
     return filteredCheckedItems.join(' ');
   } else {
     return items.join(' ');
-  }
 }
 
 function filterShoppingList(items) {
-  console.log('filterShoppinglist ran');
   return items.filter(item => item.indexOf('shopping-item__checked') === -1);
 }
-
-//   let shoppingListItemsString;
-//   if (STORE.checkFilterCheckbox === true) {
-//     const filteredShoppingList = items.filter(element => element.checked === false);
-//     shoppingListItemsString = generateShoppingItemsString(filteredShoppingList);
-//     return shoppingListItemsString;
-//   } else {
-//     shoppingListItemsString = generateShoppingItemsString(items);
-//     return shoppingListItemsString;
-//   }
-// }
-
 
 function renderShoppingList() {
   const items = [...STORE.items];  
@@ -77,9 +63,10 @@ function addItemToShoppingList(itemName) {
   STORE.items.push({name: itemName, checked: false});
 }
 
-
+//Question! -- to differentiate between the two buttons in the form, I'm using the .click instead of .submit, is this good practice?
 function handleNewItemSubmit() {
-  $('#js-shopping-list-form').submit(function(event) {
+  $('#js-add-item').click(function(event) {
+    console.log('handleNewItemSubmit ran');
     event.preventDefault();
     const newItemName = $('.js-shopping-list-entry').val();
     $('.js-shopping-list-entry').val('');
@@ -138,11 +125,25 @@ function handleCheckedFilterCheckbox() {
   });
 }
 
-//capture checkbox input from user
+function filterResultsBySearchInput(input) {
+  console.log('filterResultsBySearchInput ran');
+}
 
-function checkedFilter() {}
-//filter data to show only unchecked items
+function handleSearchBoxInput() {
+  $('#js-search-submit').click(function(event) {
+    event.preventDefault();
+    console.log('you clicked the search submit button');
+    const searchInput = $('.js-search-box').val();
+    $('.js-search-box').val('');
+    filterResultsBySearchInput(searchInput);
+    renderShoppingList();
+  });
+}
 
+
+
+//function filterSearchResults() {}
+//filter list according to search input
 
 
 // this function will be our callback when the page loads. it's responsible for
@@ -155,6 +156,7 @@ function handleShoppingList() {
   handleItemCheckClicked();
   handleDeleteItemClicked();
   handleCheckedFilterCheckbox();
+  handleSearchBoxInput();
 }
 
 // when the page loads, call `handleShoppingList`
