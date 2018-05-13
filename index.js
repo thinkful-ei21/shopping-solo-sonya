@@ -18,6 +18,7 @@ const STORE = {
 };
 
 function generateItemElement(item,index){
+
   return  `<li class="js-item-index-element" data-item-index="${index}">
   <span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>
   <div class="shopping-item-controls">
@@ -29,36 +30,28 @@ function generateItemElement(item,index){
     </button>
   </div>
 </li>`;
-}
-function generateShoppingItemsString(shoppingList){
-  const items = shoppingList.map((item,index) => generateItemElement(item,index));
-  return items.join(' ');
+
 }
 
-function filterShoppingList(items) {
+function generateShoppingItemsString(shoppingList){
+  const items = shoppingList.map((item,index) => generateItemElement(item,index));
   if (STORE.checkFilterCheckbox === true) {
-    const filteredShoppingList = items.filter((element, index) => {
-      items.index = index;
-      return element.checked === false;
-    }); 
-    return generateShoppingItemsString(filteredShoppingList);
+    const filteredCheckedItems = filterShoppingList(items); 
+    return filteredCheckedItems.join(' ');
   } else {
-    return generateShoppingItemsString(items);
+    return items.join(' ');
   }
 }
 
+function filterShoppingList(items) {
+  return items.filter(item => item.indexOf('shopping-item__checked') === -1);
+}
 
 function renderShoppingList() {
   const items = [...STORE.items];  
-  let shoppingListItemsString = filterShoppingList(items);
+  let shoppingListItemsString = generateShoppingItemsString(items);
   $('.js-shopping-list').html(shoppingListItemsString);  
-}
-
-
-// const shoppingListItemString = generateShoppingItemsString(STORE.items);  
-// $('.js-shopping-list').html(shoppingListItemString); 
-
-
+} 
 
 function addItemToShoppingList(itemName) {
   console.log(`Adding ${itemName} to shopping list`);
@@ -67,7 +60,7 @@ function addItemToShoppingList(itemName) {
 
 //Question! -- to differentiate between the two buttons in the form, I'm using the .click instead of .submit, is this good practice?
 function handleNewItemSubmit() {
-  $('#js-add-item').click(function(event) {
+  $('#js-shopping-list-form').submit(function(event) {
     console.log('handleNewItemSubmit ran');
     event.preventDefault();
     const newItemName = $('.js-shopping-list-entry').val();
@@ -78,6 +71,7 @@ function handleNewItemSubmit() {
 }
 
 function toggleCheckedForListItem(index) {
+  console.log(index);
   STORE.items[index].checked = !STORE.items[index].checked;
 }
 
@@ -128,10 +122,12 @@ function handleCheckedFilterCheckbox() {
 
 function filterResultsBySearchInput(input) {
   console.log('filterResultsBySearchInput ran');
+  
 }
 
-function handleSearchBoxInput() {
-  $('#js-search-submit').click(function(event) {
+
+function handleSearchSubmit() {
+  $('#js-search-form').submit(function(event) {
     event.preventDefault();
     console.log('you clicked the search submit button');
     const searchInput = $('.js-search-box').val();
@@ -143,7 +139,7 @@ function handleSearchBoxInput() {
 
 
 
-//function filterSearchResults() {}
+//function handleSearchSubmit() {}
 //filter list according to search input
 
 
@@ -157,7 +153,7 @@ function handleShoppingList() {
   handleItemCheckClicked();
   handleDeleteItemClicked();
   handleCheckedFilterCheckbox();
-  handleSearchBoxInput();
+  handleSearchSubmit();
 }
 
 // when the page loads, call `handleShoppingList`
