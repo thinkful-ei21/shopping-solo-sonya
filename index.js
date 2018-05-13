@@ -14,12 +14,17 @@ const STORE = {
     {name: 'oranges', checked: false},
     {name: 'milk', checked: true},
     {name: 'bread', checked: false}],
-  checkFilterCheckbox: false 
+  checkFilterCheckbox: false,
+  search: '' 
 };
 
 function generateItemElement(item,index){
 
+<<<<<<< HEAD
   return  `<li class="js-item-index-element" data-item-index="${item[index]}">
+=======
+  return  `<li class="js-item-index-element" data-item-index="${index}">
+>>>>>>> search-feature
   <span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>
   <div class="shopping-item-controls">
     <button class="shopping-item-toggle js-item-toggle">
@@ -35,14 +40,17 @@ function generateItemElement(item,index){
 
 function generateShoppingItemsString(shoppingList){
   const items = shoppingList.map((item,index) => generateItemElement(item,index));
-  if (STORE.checkFilterCheckbox === true) {
-    const filteredCheckedItems = filterShoppingList(items); 
+  if (STORE.search !== '') {
+    return findSearchItem(items);
+  } else if (STORE.checkFilterCheckbox === true) {
+    const filteredCheckedItems = filterCheckedItems(items); 
     return filteredCheckedItems.join(' ');
   } else {
     return items.join(' ');
+  }
 }
 
-function filterShoppingList(items) {
+function filterCheckedItems(items) {
   return items.filter(item => item.indexOf('shopping-item__checked') === -1);
 }
 
@@ -50,22 +58,16 @@ function renderShoppingList() {
   const items = [...STORE.items];  
   let shoppingListItemsString = generateShoppingItemsString(items);
   $('.js-shopping-list').html(shoppingListItemsString);  
-}
-
-
-// const shoppingListItemString = generateShoppingItemsString(STORE.items);  
-// $('.js-shopping-list').html(shoppingListItemString); 
-
-
+} 
 
 function addItemToShoppingList(itemName) {
   console.log(`Adding ${itemName} to shopping list`);
   STORE.items.push({name: itemName, checked: false});
 }
 
-//Question! -- to differentiate between the two buttons in the form, I'm using the .click instead of .submit, is this good practice?
+
 function handleNewItemSubmit() {
-  $('#js-add-item').click(function(event) {
+  $('#js-shopping-list-form').submit(function(event) {
     console.log('handleNewItemSubmit ran');
     event.preventDefault();
     const newItemName = $('.js-shopping-list-entry').val();
@@ -107,8 +109,6 @@ function handleDeleteItemClicked() {
   });
 }
 
-
-
 function handleCheckedFilterCheckbox() {
   $('.js-check-filter-checkbox').on('change', function(event) {
     console.log('you checked the box');
@@ -125,26 +125,22 @@ function handleCheckedFilterCheckbox() {
   });
 }
 
-function filterResultsBySearchInput(input) {
-  console.log('filterResultsBySearchInput ran');
+
+function findSearchItem(items) {
+  return items.find(item => item.includes(STORE.search));
 }
 
-function handleSearchBoxInput() {
-  $('#js-search-submit').click(function(event) {
+function handleSearchSubmit() {
+  $('#js-search-form').submit(function(event) {
     event.preventDefault();
     console.log('you clicked the search submit button');
     const searchInput = $('.js-search-box').val();
-    $('.js-search-box').val('');
-    filterResultsBySearchInput(searchInput);
+    STORE.search = searchInput;
+    //$('.js-search-box').val('');
+    //filterResultsBySearchInput(searchInput);
     renderShoppingList();
   });
 }
-
-
-
-//function filterSearchResults() {}
-//filter list according to search input
-
 
 // this function will be our callback when the page loads. it's responsible for
 // initially rendering the shopping list, and activating our individual functions
@@ -156,7 +152,7 @@ function handleShoppingList() {
   handleItemCheckClicked();
   handleDeleteItemClicked();
   handleCheckedFilterCheckbox();
-  handleSearchBoxInput();
+  handleSearchSubmit();
 }
 
 // when the page loads, call `handleShoppingList`
