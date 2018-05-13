@@ -19,12 +19,7 @@ const STORE = {
 };
 
 function generateItemElement(item,index){
-
-<<<<<<< HEAD
-  return  `<li class="js-item-index-element" data-item-index="${item[index]}">
-=======
   return  `<li class="js-item-index-element" data-item-index="${index}">
->>>>>>> search-feature
   <span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>
   <div class="shopping-item-controls">
     <button class="shopping-item-toggle js-item-toggle">
