@@ -32,31 +32,37 @@ function generateItemElement(item,index){
 </li>`;
 
 }
+
 function generateShoppingItemsString(shoppingList){
   const items = shoppingList.map((item,index) => generateItemElement(item,index));
-  return items.join(' ');
+  if (STORE.checkFilterCheckbox === true) {
+    const filteredCheckedItems = filterShoppingList(items); 
+    return filteredCheckedItems.join(' ');
+  } else {
+    return items.join(' ');
+  }
 }
 
 function filterShoppingList(items) {
-  let shoppingListItemsString;
-  if (STORE.checkFilterCheckbox === true) {
-    const filteredShoppingList = items.filter((element, index) => {
-      element[index] = index;
-      return element.checked === false;
-    });
-    console.log(filteredShoppingList);
-    shoppingListItemsString = generateShoppingItemsString(filteredShoppingList);
-    return shoppingListItemsString;
-  } else {
-    shoppingListItemsString = generateShoppingItemsString(items);
-    return shoppingListItemsString;
-  }
+  console.log('filterShoppinglist ran');
+  return items.filter(item => item.indexOf('shopping-item__checked') === -1);
 }
+
+//   let shoppingListItemsString;
+//   if (STORE.checkFilterCheckbox === true) {
+//     const filteredShoppingList = items.filter(element => element.checked === false);
+//     shoppingListItemsString = generateShoppingItemsString(filteredShoppingList);
+//     return shoppingListItemsString;
+//   } else {
+//     shoppingListItemsString = generateShoppingItemsString(items);
+//     return shoppingListItemsString;
+//   }
+// }
 
 
 function renderShoppingList() {
   const items = [...STORE.items];  
-  let shoppingListItemsString = filterShoppingList(items);
+  let shoppingListItemsString = generateShoppingItemsString(items);
   $('.js-shopping-list').html(shoppingListItemsString);  
 }
 
