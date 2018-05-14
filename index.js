@@ -69,13 +69,11 @@ function renderShoppingList() {
 //add new items to shopping list
 
 function addItemToShoppingList(itemName) {
-  console.log(`Adding ${itemName} to shopping list`);
   STORE.items.push({name: itemName, checked: false});
 }
 
 function handleNewItemSubmit() {
   $('#js-shopping-list-form').submit(function(event) {
-    console.log('handleNewItemSubmit ran');
     event.preventDefault();
     const newItemName = $('.js-shopping-list-entry').val();
     $('.js-shopping-list-entry').val('');
@@ -88,7 +86,6 @@ function handleNewItemSubmit() {
 //check and uncheck items
 
 function toggleCheckedForListItem(index) {
-  console.log(index);
   STORE.items[index].checked = !STORE.items[index].checked;
 }
 
@@ -125,16 +122,11 @@ function handleDeleteItemClicked() {
 
 function handleCheckedFilterCheckbox() {
   $('.js-check-filter-checkbox').on('change', function(event) {
-    console.log('you checked the box');
     if (event.currentTarget.checked) {
       STORE.checkFilterCheckbox = true;
-      console.log('it`s set to true');
     } else {
       STORE.checkFilterCheckbox = false;
-      console.log('it`s set to false');
     }
-   
-    console.log(STORE.checkFilterCheckbox);
     renderShoppingList();
   });
 }
@@ -152,7 +144,6 @@ function findSearchItem(items) {
 function handleSearchSubmit() {
   $('#js-search-form').submit(function(event) {
     event.preventDefault();
-    console.log('you clicked the search submit button');
     const searchInput = $('.js-search-box').val();
     STORE.search = searchInput;
     renderShoppingList();
@@ -165,30 +156,12 @@ function handleItemEditSubmit() {
   $('.shopping-list').on('submit', '.js-item-edit-form', function(event) {
     event.preventDefault();
     const index = getItemIndexFromElement(event.currentTarget);
-    console.log('you clicked the edit button');
     const editedItemInput = $(event.currentTarget).closest('form').find('.js-edited-item-value').val();
-    console.log(editedItemInput);
     $('.js-edited-item-text-box').val('');
-    //STORE.editInput = {index: index, newName: editedItemInput}
     STORE.items[index].name = editedItemInput;
     renderShoppingList();
   });
 }
-
-
-// function editItem(items) {
-//   console.log(STORE.editInput);
-//   if (STORE.editInput !== {}) {
-//     const index = STORE.editInput.index;
-//     console.log(index);
-//     console.log(items[index]);
-//     items[index].name = STORE.editInput.newName;
-//   }
-// }
-
-//editItemName() {}
-//use editItemName() in generateShoppingItemsString() 
-
 
 // this function will be our callback when the page loads. it's responsible for
 // initially rendering the shopping list, and activating our individual functions
