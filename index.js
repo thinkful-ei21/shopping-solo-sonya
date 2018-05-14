@@ -16,10 +16,7 @@ const STORE = {
     {name: 'bread', checked: false}],
   checkFilterCheckbox: false,
   search: '', 
-  editInput: [{name: 'apples', checked: false},
-    {name: 'oranges', checked: false},
-    {name: 'milk', checked: true},
-    {name: 'bread', checked: false}],
+  editInput: {},
 };
 
 //Render the page
@@ -29,7 +26,7 @@ function generateItemElement(item,index){
   <form class='js-item-edit-form'>
     <span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>
     <label for='edited-item-value'>Edit your Item</label>
-    <input type='text' name='edited-item-value' class='js-edited-item-text-box' 'edited-item-text-box'>
+    <input type='text' name='edited-item-value' class='js-edited-item-value' 'edited-item-text-box'>
     <button type='submit'>Edit</button>
   </form><br>
   <div class="shopping-item-controls">
@@ -44,7 +41,7 @@ function generateItemElement(item,index){
 }
 
 function generateShoppingItemsString(shoppingList){
-  const items = shoppingList.map((item,index) => generateItemElement(item,index));
+  const items = shoppingList.map((item, index) => generateItemElement(item,index));
   if (STORE.search !== '') {
     return findSearchItem(items);
   } else if (STORE.checkFilterCheckbox === true) {
@@ -62,6 +59,7 @@ function generateShoppingItemsString(shoppingList){
 
 function renderShoppingList() {
   const items = [...STORE.items];  
+  //let editedItems = editItem(items);
   let shoppingListItemsString = generateShoppingItemsString(items);
   //if name is edited, run function that changes the name in STORE.items array;
   $('.js-shopping-list').html(shoppingListItemsString);  
@@ -164,32 +162,29 @@ function handleSearchSubmit() {
 //edit the item
 
 function handleItemEditSubmit() {
-  $('.js-shopping-list').on('submit', '.js-item-edit-form', function(event) {
+  $('.shopping-list').on('submit', '.js-item-edit-form', function(event) {
     event.preventDefault();
-    //console.log('you clicked the edit button');
-
-//Q! --- Why doesn't the following grab the text in the html span?
-
-    const originalItemName = $('event.currentTarget').closest('form.js-item-edit-form').find('span.js-shopping-item').text();
-    const editedItemInput = $('.js-edited-item-text-box').val();
+    const index = getItemIndexFromElement(event.currentTarget);
+    console.log('you clicked the edit button');
+    const editedItemInput = $(event.currentTarget).closest('form').find('.js-edited-item-value').val();
+    console.log(editedItemInput);
     $('.js-edited-item-text-box').val('');
-    console.log(originalItemName);
-    //console.log(editedItemInput);
-    //console.log(STORE.editInput[0].name);
-
-    //Q! -- Why doesn't this work if I make changingElement a const variable?
-    
-    //let changingElement = STORE.editInput.find(function(element) {
-      //console.log(element.name);
-      //return  originalItemName === element.name;
-    //} );
-    //console.log(changingElement);
-    //console.log('handleItemEditSubmit ran');
-    //console.log(STORE.editInput);
+    //STORE.editInput = {index: index, newName: editedItemInput}
+    STORE.items[index].name = editedItemInput;
     renderShoppingList();
   });
 }
 
+
+// function editItem(items) {
+//   console.log(STORE.editInput);
+//   if (STORE.editInput !== {}) {
+//     const index = STORE.editInput.index;
+//     console.log(index);
+//     console.log(items[index]);
+//     items[index].name = STORE.editInput.newName;
+//   }
+// }
 
 //editItemName() {}
 //use editItemName() in generateShoppingItemsString() 
