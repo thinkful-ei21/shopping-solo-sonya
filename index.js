@@ -15,8 +15,7 @@ const STORE = {
     {name: 'milk', checked: true},
     {name: 'bread', checked: false}],
   checkFilterCheckbox: false,
-  search: '', 
-  editInput: {},
+  search: ''
 };
 
 //Render the page
